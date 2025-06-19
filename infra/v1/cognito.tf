@@ -20,9 +20,12 @@ resource "aws_cognito_user_pool" "pool" {
 }
 
 resource "aws_cognito_user_pool_domain" "main" {
-  domain = "${var.projectName}-domain"  # Or any desired prefix for your domain
-  managed_login_version = 2
-  user_pool_id          = aws_cognito_user_pool.pool.id
+  domain       = "${var.projectName}-${random_id.suffix.hex}"  # Garante domínio único
+  user_pool_id = aws_cognito_user_pool.pool.id
+}
+
+resource "random_id" "suffix" {
+  byte_length = 4
 }
 
 resource "awscc_cognito_user_pool_client" "client" {
@@ -37,7 +40,8 @@ resource "awscc_cognito_user_pool_client" "client" {
   explicit_auth_flows = [
     "ALLOW_USER_AUTH",
     "ALLOW_USER_SRP_AUTH",
-    "ALLOW_REFRESH_TOKEN_AUTH"
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_CUSTOM_AUTH"
   ]
   allowed_o_auth_flows_user_pool_client = true
   callback_ur_ls = [
