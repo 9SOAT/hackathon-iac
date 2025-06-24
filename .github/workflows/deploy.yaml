@@ -35,7 +35,7 @@ jobs:
 
       - name: Compactar Lambda em ZIP
         run: |
-          zip infra/v1/lambda_function.zip lambdas/python/presigned_dummy.py
+          zip infra/v1/presigned_dummy.zip lambdas/python/presigned_dummy.py
 
       - name: Configurar Terraform
         uses: hashicorp/setup-terraform@v2
