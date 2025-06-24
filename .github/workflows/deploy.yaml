@@ -44,12 +44,12 @@ jobs:
 
       - name: Inicializar Terraform
         run: |
-          cd terraform
+          cd infra/v1
           terraform init
 
       - name: Aplicar Terraform (Deploy Lambda)
         id: apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          cd terraform
+          cd infra/v1
           terraform apply -auto-approve
