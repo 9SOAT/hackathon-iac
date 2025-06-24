@@ -33,10 +33,6 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Compactar Lambda em ZIP
-        run: |
-          zip infra/v1/lambda_function.zip lambda/lambda_function.py
-
       - name: Configurar Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -50,6 +46,8 @@ jobs:
       - name: Aplicar Terraform (Deploy Lambda)
         id: apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          TF_VAR_verified_email: ${{ secrets.VERIFIED_EMAIL }}
         run: |
           cd infra/v1
           terraform apply -auto-approve
