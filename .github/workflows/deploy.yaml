@@ -33,10 +33,6 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Compactar Lambda em ZIP
-        run: |
-          zip infra/v1/lambda_function.zip lambda/lambda_function.py
-
       - name: Configurar Terraform
         uses: hashicorp/setup-terraform@v2
         with:
