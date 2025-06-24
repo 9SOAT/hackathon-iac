@@ -15,44 +15,29 @@ resource "aws_apigatewayv2_authorizer" "auth" {
   }
 }
 
-
-/*
-data "aws_region" "current" {
-  current = true
+# Permitir API Gateway chamar a Lambda
+resource "aws_lambda_permission" "apigw_invoke" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.presigned_url_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.gateway.execution_arn}/*/*"
 }
 
-data "aws_caller_identity" "current" {}
-
-resource "aws_apigatewayv2_integration" "int" {
+# API Gateway Integration com Lambda
+resource "aws_apigatewayv2_integration" "lambda_integration" {
   api_id           = aws_apigatewayv2_api.gateway.id
   integration_type = "AWS_PROXY"
-  connection_type = "INTERNET"
+  integration_uri  = aws_lambda_function.presigned_url_lambda.invoke_arn
   integration_method = "POST"
-  integration_uri = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.id}:function:${var.lambda_name}/invocations"
+  payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_route" "route" {
+# Route para a Lambda
+resource "aws_apigatewayv2_route" "lambda_route" {
   api_id    = aws_apigatewayv2_api.gateway.id
-  route_key = "GET example"
-  target = "integrations/${aws_apigatewayv2_integration.int.id}"
-  authorization_type = "JWT"
-  authorizer_id = aws_apigatewayv2_authorizer.auth.id
-}
-*/
-
-
-resource "aws_apigatewayv2_integration" "test" {
-  api_id           = aws_apigatewayv2_api.gateway.id
-  integration_type = "HTTP_PROXY"
-  connection_type = "INTERNET"
-  integration_method = "GET"
-  integration_uri = "https://reqbin.com/echo/get/json"
-}
-
-resource "aws_apigatewayv2_route" "route" {
-  api_id    = aws_apigatewayv2_api.gateway.id
-  route_key = "GET /test"
-  target = "integrations/${aws_apigatewayv2_integration.test.id}"
+  route_key = "POST /presigned-url"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
   authorization_type = "JWT"
   authorizer_id = aws_apigatewayv2_authorizer.auth.id
 }
