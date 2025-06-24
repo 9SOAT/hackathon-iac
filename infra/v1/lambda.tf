@@ -27,9 +27,9 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 # Lambda Function
 resource "aws_lambda_function" "presigned_url_lambda" {
   function_name = "${var.projectName}_presigned_url"
-  filename      = "lambda_function.zip"
-  source_code_hash = filebase64sha256("lambda_function.zip")
-  handler       = "lambda_function.lambda_handler"
+  filename      = "presigned_dummy.zip"
+  source_code_hash = filebase64sha256("presigned_dummy.zip")
+  handler       = "presigned_dummy.lambda_handler"
   runtime       = "python3.9"
   role          = aws_iam_role.lambda_exec_role.arn
 
