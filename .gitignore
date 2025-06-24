@@ -41,3 +41,5 @@ terraform.rc
 .idea/
 .idea/*
 
+# Exclude all build directories
+env/homolog/builds/*
