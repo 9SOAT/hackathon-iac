@@ -33,6 +33,8 @@ jobs:
           terraform init -reconfigure
 
       - name: Destruir Lambda
+        env:
+          TF_VAR_verified_email: ${{ secrets.VERIFIED_EMAIL }}
         run: |
           cd infra/v1
           terraform destroy -auto-approve
