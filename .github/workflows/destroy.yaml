@@ -24,6 +24,15 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.AWS_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compactar Lambda em ZIP
+        run: |
+          zip infra/v1/presigned_dummy.zip lambdas/python/presigned_dummy.py
+
       - name: Configurar Terraform
         uses: hashicorp/setup-terraform@v2
 
