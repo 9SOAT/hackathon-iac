@@ -30,7 +30,7 @@ resource "aws_lambda_function" "presigned_url_lambda" {
   filename      = "presigned_dummy.zip"
   source_code_hash = filebase64sha256("presigned_dummy.zip")
   handler       = "presigned_dummy.lambda_handler"
-  runtime       = "python3.9"
+  runtime       = "python3.11"
   role          = aws_iam_role.lambda_exec_role.arn
 
   environment {
