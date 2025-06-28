@@ -11,6 +11,10 @@ jobs:
       contents: read
       id-token: write
 
+    defaults:
+      run:
+        working-directory: ./env/homolog
+
     env:
       AWS_REGION: us-east-1
 
@@ -29,21 +33,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Compactar Lambda em ZIP
-        run: |
-          zip infra/v1/presigned_dummy.zip lambdas/python/presigned_dummy.py
-
       - name: Configurar Terraform
         uses: hashicorp/setup-terraform@v2
 
       - name: Inicializar Terraform
-        run: |
-          cd infra/v1
-          terraform init -reconfigure
+        run: terraform init -reconfigure
 
-      - name: Destruir Lambda
+      - name: Destruir Infra
         env:
           TF_VAR_verified_email: ${{ secrets.VERIFIED_EMAIL }}
-        run: |
-          cd infra/v1
-          terraform destroy -auto-approve
+        run: terraform destroy -auto-approve
