@@ -38,3 +38,11 @@ resource "aws_lambda_function" "email_notification_lambda" {
   role          = aws_iam_role.notification_lambda_role.arn
   tags = var.tags
 }
+
+# Event source from SQS
+resource "aws_lambda_event_source_mapping" "event_source_mapping" {
+  event_source_arn = aws_sqs_queue.email_notification_queue.arn
+  enabled          = true
+  function_name    = aws_lambda_function.email_notification_lambda.arn
+  batch_size       = 1
+}
