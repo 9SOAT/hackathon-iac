@@ -49,6 +49,7 @@ jobs:
 
       - name: Aplicar Terraform (Deploy Lambda)
         id: apply
+        working-directory: ./env/homolog
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           TF_VAR_verified_email: '"${{ secrets.VERIFIED_EMAIL }}"'
