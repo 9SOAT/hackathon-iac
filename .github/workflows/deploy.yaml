@@ -50,4 +50,4 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           TF_VAR_verified_email: ${{ secrets.VERIFIED_EMAIL }}
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var="verified_email=${{ secrets.VERIFIED_EMAIL }}"
