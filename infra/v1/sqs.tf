@@ -22,3 +22,9 @@ resource "aws_sqs_queue" "s3_notifications_sqs" {
 
   tags = var.tags
 }
+
+resource "aws_sqs_queue" "email_notification_queue" {
+  name                      = "${var.projectName}-email-notification-queue"
+  receive_wait_time_seconds = 10
+  tags = var.tags
+}

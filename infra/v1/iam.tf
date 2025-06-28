@@ -62,6 +62,11 @@ resource "aws_iam_role_policy_attachment" "notification_lambda_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "notification_lambda_sqs" {
+  role       = aws_iam_role.notification_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+}
+
 resource "aws_iam_policy" "ses_send_templated_email" {
   name        = "SESSendTemplatedEmailPolicy"
   description = "Policy to allow SES sendTemplatedEmail only."
