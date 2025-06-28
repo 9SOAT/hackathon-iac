@@ -21,6 +21,8 @@ jobs:
 
     env:
       AWS_REGION: us-east-1
+      TF_VAR_verified_email: ${{ secrets.VERIFIED_EMAIL }}
+
 
     steps:
       - name: Checkout do código
