@@ -53,4 +53,4 @@ jobs:
         env:
           TF_VAR_verified_email: '${{ secrets.VERIFIED_EMAIL }}'
         run: |
-          terraform apply -var="verified_email=${{ secrets.VERIFIED_EMAIL }}" -auto-approve
+          terraform apply -auto-approve
