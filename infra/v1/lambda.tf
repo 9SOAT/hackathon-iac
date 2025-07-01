@@ -1,29 +1,4 @@
-# Lambda Role
-resource "aws_iam_role" "lambda_exec_role" {
-  name = "${var.projectName}_lambda_role-teste-matheus"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Action    = "sts:AssumeRole",
-      Effect    = "Allow",
-      Principal = {
-        Service = "lambda.amazonaws.com"
-      }
-    }]
-  })
-}
-
-# Policy para a Lambda acessar o S3 e logs
-resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
-  role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 # Package the presigned URL Lambda function code
-}
 data "archive_file" "dummy_presigned_url_zip" {
   type        = "zip"
   output_path = "${path.module}/../../lambdas/dummy/presigned_url.zip"
@@ -70,4 +45,39 @@ resource "aws_lambda_event_source_mapping" "event_source_mapping" {
   enabled          = true
   function_name    = aws_lambda_function.email_notification_lambda.arn
   batch_size       = 1
+}
+
+
+data "archive_file" "dummy_processor_zip" {
+  type        = "zip"
+  output_path = "${path.module}/../../lambdas/dummy/process_video.zip"
+  source_dir = "${path.module}/../../lambdas/dummy/process_video"
+}
+
+
+resource "aws_lambda_function" "processor" {
+  function_name    = "video-processor-${var.projectName}"
+  filename         = data.archive_file.dummy_processor_zip.output_path
+  source_code_hash = data.archive_file.dummy_processor_zip.output_base64sha256
+  handler       = "lambda_processor.lambda_handler"
+  runtime       = "python3.11"
+  timeout          = 900
+  memory_size      = 1024
+  layers           = ["arn:aws:lambda:us-east-1:897722698720:layer:ffmpeg:1"]
+  role          = aws_iam_role.lambda_exec.arn
+
+  environment {
+    variables = {
+      INPUT_BUCKET  = var.input_bucket_name
+      OUTPUT_BUCKET = var.output_bucket_name
+      DDB_TABLE     = var.ddb_table_name
+      SNS_TOPIC_ARN = var.sns_topic_name
+    }
+  }
+}
+resource "aws_lambda_event_source_mapping" "sqs2lambda" {
+  event_source_arn = aws_sqs_queue.processing_queue.arn
+  function_name    = aws_lambda_function.processor.arn
+  batch_size       = 1
+  enabled          = true
 }
