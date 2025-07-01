@@ -1,6 +1,6 @@
 # Lambda Role
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "${var.projectName}_lambda_role"
+  name = "${var.projectName}_lambda_role-teste-matheus"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -27,8 +27,8 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 # Lambda Function
 resource "aws_lambda_function" "presigned_url_lambda" {
   function_name = "${var.projectName}_presigned_url"
-  filename      = "presigned_dummy.zip"
-  source_code_hash = filebase64sha256("presigned_dummy.zip")
+  filename      = "/home/matheusfrancesquini/Documentos/FIAP/HackTom/hackathon-iac/lambdas/python/presigned_dummy.zip"
+  source_code_hash = filebase64sha256("/home/matheusfrancesquini/Documentos/FIAP/HackTom/hackathon-iac/lambdas/python/presigned_dummy.zip")
   handler       = "presigned_dummy.lambda_handler"
   runtime       = "python3.11"
   role          = aws_iam_role.lambda_exec_role.arn
@@ -38,4 +38,6 @@ resource "aws_lambda_function" "presigned_url_lambda" {
       BUCKET_NAME = "presigned-url-fiap-test"
     }
   }
+
+  
 }

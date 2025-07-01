@@ -27,7 +27,7 @@ resource "aws_iam_policy" "ses_send_templated_email" {
 
 module "lambda_function" {
   source = "terraform-aws-modules/lambda/aws"
-  function_name = "PythonSesEmailSender"
+  function_name = "PythonSesEmailSenderV2"
   source_path   = "${path.module}/../../lambdas/python/"
   handler       = "main.lambda_handler"
   runtime       = "python3.11"

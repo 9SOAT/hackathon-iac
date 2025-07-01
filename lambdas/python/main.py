@@ -35,11 +35,21 @@ def send_templated_email(receiver_email: str, template_name: str, sender_email: 
 
 def lambda_handler(event, context):
     try:
-        receiver_email = event["receiver_email"]
-        sender_email = event["sender_email"]
-        template_name = event["template_name"]
-        placeholders = event["placeholders"]
+        for record in event['Records']:
+            sns_message_string = record['Sns']['Message']
+            message_data = json.loads(sns_message_string)
 
+            print(f"String da mensagem recebida: {message_data}")
+            
+            receiver_email = message_data["receiver_email"]
+            sender_email = message_data["sender_email"]
+            template_name = message_data["template_name"]
+            placeholders = message_data["placeholders"]
+            
+            print(f"Processando e-mail para: {receiver_email}")
+            print(f"Template: {template_name}")
+            print(f"Placeholders: {placeholders}")
+        
         return send_templated_email(receiver_email, template_name, sender_email, placeholders)
     except Exception as e:
         return {
