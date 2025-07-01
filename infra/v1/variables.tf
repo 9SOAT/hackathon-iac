@@ -32,10 +32,3 @@ variable "output_bucket_name" {
   type        = string
   default     = "hackathon-fiap-soat-output-bucket"
 }
-
-
-variable "sns_topic_name" {
-  description = "Name of the SNS topic for job completion notifications"
-  type        = string
-  default     = "hackathon-video-complete-topic"
-}

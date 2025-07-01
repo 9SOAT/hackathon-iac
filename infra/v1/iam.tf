@@ -111,3 +111,35 @@ resource "aws_iam_role_policy" "custom" {
   })
 }
 
+# 2. Documento da política em formato de dados (mais seguro e legível)
+data "aws_iam_policy_document" "lambda_publish_sns" {
+  statement {
+    sid    = "AllowLambdaToPublishToSNSTopic"
+    effect = "Allow"
+    
+    actions = [
+      "sns:Publish",
+    ]
+
+    resources = [
+      # Referencie o ARN do seu tópico SNS dinamicamente
+      aws_sqs_queue.email_notification_queue.arn,
+    ]
+  }
+}
+
+# 3. Cria o recurso da política IAM com base no documento acima
+resource "aws_iam_policy" "lambda_publish_sns_policy" {
+  name        = "lambda-sns-publish-policy-${var.projectName}"
+  description = "Política que permite ao Lambda publicar em um tópico SNS específico."
+  policy      = data.aws_iam_policy_document.lambda_publish_sns.json
+}
+
+# 4. Anexa a política recém-criada à role do seu Lambda
+resource "aws_iam_role_policy_attachment" "lambda_sns_publish_attachment" {
+  # O nome da role que seu Lambda está usando
+  role       = aws_iam_role.lambda_exec.name 
+  
+  # O ARN da política que acabamos de criar
+  policy_arn = aws_iam_policy.lambda_publish_sns_policy.arn
+}

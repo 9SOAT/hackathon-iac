@@ -71,7 +71,7 @@ resource "aws_lambda_function" "processor" {
       INPUT_BUCKET  = var.input_bucket_name
       OUTPUT_BUCKET = var.output_bucket_name
       DDB_TABLE     = var.ddb_table_name
-      SNS_TOPIC_ARN = var.sns_topic_name
+      SNS_TOPIC_ARN = aws_sns_topic.complete.arn
     }
   }
 }
