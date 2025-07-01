@@ -5,6 +5,12 @@ module "main" {
     Team        = "9soat"
     Terraform   = "true"
   }
+  verified_email = var.verified_email
+}
+
+variable "verified_email" {
+    type        = string
+    description = "Email address to be verified for the Cognito User Pool"
 }
 
 output "api_gateway_url" {

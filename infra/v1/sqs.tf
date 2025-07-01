@@ -56,3 +56,9 @@ resource "aws_sqs_queue_policy" "allow_s3" {
     }]
   })
 }
+
+resource "aws_sqs_queue" "email_notification_queue" {
+  name                      = "${var.projectName}-email-notification-queue"
+  receive_wait_time_seconds = 10
+  tags = var.tags
+}

@@ -11,6 +11,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./env/homolog
+
     permissions:
       id-token: write
       contents: read
@@ -33,25 +37,20 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Compactar Lambda em ZIP
-        run: |
-          zip infra/v1/presigned_dummy.zip lambdas/python/presigned_dummy.py
-
       - name: Configurar Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.10.5
 
       - name: Inicializar Terraform
-        run: |
-          cd infra/v1
-          terraform init
+        working-directory: ./env/homolog
+        run: terraform init
 
       - name: Aplicar Terraform (Deploy Lambda)
         id: apply
+        working-directory: ./env/homolog
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
-          TF_VAR_verified_email: ${{ secrets.VERIFIED_EMAIL }}
+          TF_VAR_verified_email: '${{ secrets.VERIFIED_EMAIL }}'
         run: |
-          cd infra/v1
           terraform apply -auto-approve

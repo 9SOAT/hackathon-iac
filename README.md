@@ -79,7 +79,7 @@ Após a aplicação bem-sucedida do Terraform, diversos outputs estarão dispon�
 
 ## Lambda de Envio de Emails
 
-A função lambda para envio de emails utiliza o Amazon SES (Simple Email Service) para enviar emails a partir de templates pré-configurados. Para utilizar esta lambda:
+A função lambda para envio de emails utiliza o Amazon SES (Simple Email Service) para enviar emails a partir de templates pré-configurados.  Para utilizar esta lambda:
 
 ### Pré-requisitos
 
