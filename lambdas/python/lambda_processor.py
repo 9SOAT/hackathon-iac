@@ -81,7 +81,6 @@ def process_message(record):
     upload_file_to_s3(zip_path, OUTPUT_BUCKET, zip_key)
     save_metadata(prefix, f"s3://{bucket_name}/{object_key}", download_url)
 
-            # 6. ⭐ GERAÇÃO DO LINK DE DOWNLOAD ⭐
     download_url = generate_s3_presigned_url(OUTPUT_BUCKET, zip_key)
     if download_url:
         logger.info(f"Link para download (válido por 1 hora): {download_url}")
