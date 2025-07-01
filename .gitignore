@@ -165,3 +165,30 @@ cython_debug/
 .terraform
 *.terraform.lock.hcl*
 **/.terraform*
+
+# Crash log files
+crash.log
+crash.*.log
+
+*.tfvars
+*.tfvars.json
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+lambdas/dummy/*.zip
+
+# IntelliJ
+.idea/
+.idea/*
+
+# Exclude all build directories
+env/homolog/builds/*
