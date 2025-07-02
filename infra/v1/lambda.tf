@@ -47,13 +47,34 @@ resource "aws_lambda_event_source_mapping" "event_source_mapping" {
   batch_size       = 1
 }
 
+# Package the listing lambda function code
+data "archive_file" "listing_lambda_zip" {
+  type        = "zip"
+  output_path = "${path.module}/../../lambdas/dummy/listing_lambda.zip"
+  source_dir  = "${path.module}/../../lambdas/dummy/listing_lambda"
+}
+
+resource "aws_lambda_function" "listing_lambda" {
+  function_name    = "${var.projectName}_listing_lambda"
+  filename         = data.archive_file.listing_lambda_zip.output_path
+  source_code_hash = data.archive_file.listing_lambda_zip.output_base64sha256
+  handler          = "lambda_function.lambda_handler"
+  runtime          = "python3.11"
+  role             = aws_iam_role.lambda_exec_role.arn
+
+  environment {
+    variables = {
+      DDB_TABLE = aws_dynamodb_table.your_dynamodb_table.name
+    }
+  }
+  tags = var.tags
+}
 
 data "archive_file" "dummy_processor_zip" {
   type        = "zip"
   output_path = "${path.module}/../../lambdas/dummy/process_video.zip"
   source_dir = "${path.module}/../../lambdas/dummy/process_video"
 }
-
 
 resource "aws_lambda_function" "processor" {
   function_name    = "video-processor-${var.projectName}"
