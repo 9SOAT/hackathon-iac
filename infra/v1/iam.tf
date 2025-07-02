@@ -39,7 +39,8 @@ data "aws_iam_policy_document" "ses_send_templated_email_policy" {
     ]
     resources = [
       aws_ses_email_identity.semplates_email_identity.arn,
-      aws_ses_template.success_email_template.arn
+      aws_ses_template.success_email_template.arn,
+      aws_ses_template.failure_email_template.arn
     ]
   }
 
@@ -48,7 +49,7 @@ data "aws_iam_policy_document" "ses_send_templated_email_policy" {
     actions = [
       "ses:GetTemplate",
     ]
-    resources = [aws_ses_template.success_email_template.arn]
+    resources = [aws_ses_template.success_email_template.arn, aws_ses_template.failure_email_template.arn]
   }
 }
 

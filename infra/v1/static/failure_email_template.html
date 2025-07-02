@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falha no Processamento do Arquivo</title>
+    <link href="https://fonts.googleapis.com/css?family=Cabin:400,700&display=swap" rel="stylesheet">
+</head>
+<body style="background-color: #f9f9f9; margin: 0; padding: 0;">
+
+<!-- Cabeçalho do email -->
+<div class="u-row-container" style="padding: 0px;background-color: transparent">
+    <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;background-color: #e74c3c;">
+        <div style="padding: 30px 10px;text-align: center;">
+            <h1 style="margin: 0; color: #ffffff; font-family: 'Cabin', sans-serif;">Falha no Processamento</h1>
+        </div>
+    </div>
+</div>
+
+<!-- Corpo do email -->
+<div class="u-row-container" style="padding: 0px;background-color: transparent">
+    <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;background-color: #ffffff;">
+        <div style="padding: 30px 20px;">
+            <p style="font-family: 'Cabin', sans-serif;font-size: 16px;">
+                Olá {{NAME}},
+            </p>
+            <p style="font-family: 'Cabin', sans-serif;font-size: 16px;margin-top: 20px;">
+                Infelizmente, seu arquivo não pôde ser processado devido a um erro.
+            </p>
+            <p style="font-family: 'Cabin', sans-serif;font-size: 16px;margin-top: 20px;">
+                Detalhes do erro:
+            </p>
+            <ul style="font-family: 'Cabin', sans-serif;font-size: 16px;">
+                <li>Data e hora: <strong>{{PROCESS_DATE}}</strong></li>
+                <li>Nome do arquivo: <strong>{{FILE_NAME}}</strong></li>
+                <li>Código do erro: <strong>{{ERROR_CODE}}</strong></li>
+                <li>Mensagem de erro: <strong>{{ERROR_MESSAGE}}</strong></li>
+            </ul>
+            <p style="font-family: 'Cabin', sans-serif;font-size: 16px;margin-top: 20px; background-color: #fff9e6; padding: 15px; border-left: 4px solid #e74c3c;">
+                <strong>O que fazer agora?</strong><br>
+                Por favor, verifique se o arquivo está no formato correto e tente fazer o upload novamente.
+                Se o problema persistir, entre em contato com nossa equipe de suporte.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Rodapé do email -->
+<div class="u-row-container" style="padding: 0px;background-color: transparent">
+    <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;background-color: #ecf0f1;">
+        <div style="padding: 20px 10px;text-align: center;">
+            <p style="font-family: 'Cabin', sans-serif;font-size: 14px;color: #7f8c8d;">
+                Esta é uma mensagem automática, por favor não responda.
+            </p>
+            <p style="font-family: 'Cabin', sans-serif;font-size: 14px;color: #7f8c8d;margin-top: 10px;">
+                © 2023 Hackathon FIAP. Todos os direitos reservados.
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
