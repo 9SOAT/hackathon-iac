@@ -64,7 +64,7 @@ resource "aws_lambda_function" "listing_lambda" {
 
   environment {
     variables = {
-      DDB_TABLE = aws_dynamodb_table.your_dynamodb_table.name
+      DDB_TABLE = aws_dynamodb_table.jobs.name
     }
   }
   tags = var.tags
