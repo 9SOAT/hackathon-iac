@@ -77,7 +77,8 @@ data "archive_file" "dummy_processor_zip" {
 }
 
 resource "aws_lambda_function" "processor" {
-  function_name    = "${var.projectName}_video_processor}"
+
+  function_name    = "${var.projectName}_video_processor"
   filename         = data.archive_file.dummy_processor_zip.output_path
   source_code_hash = data.archive_file.dummy_processor_zip.output_base64sha256
   handler       = "lambda_processor.lambda_handler"
