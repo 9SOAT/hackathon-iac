@@ -77,7 +77,6 @@ data "archive_file" "dummy_processor_zip" {
 }
 
 resource "aws_lambda_function" "processor" {
-
   function_name    = "${var.projectName}_video_processor"
   filename         = data.archive_file.dummy_processor_zip.output_path
   source_code_hash = data.archive_file.dummy_processor_zip.output_base64sha256
@@ -93,7 +92,7 @@ resource "aws_lambda_function" "processor" {
       INPUT_BUCKET  = var.input_bucket_name
       OUTPUT_BUCKET = var.output_bucket_name
       DDB_TABLE     = var.ddb_table_name
-      SNS_TOPIC_ARN = aws_sns_topic.complete.arn
+      SQS_QUEUE_URL = aws_sqs_queue.email_notification_queue.id
     }
   }
 }
