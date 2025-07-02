@@ -111,33 +111,14 @@ resource "aws_iam_role_policy" "custom" {
           "${aws_s3_bucket.s3_output_bucket.arn}/*"]
         },
       { Sid = "SQSAccess", Effect = "Allow", Action = ["sqs:ReceiveMessage","sqs:DeleteMessage","sqs:GetQueueAttributes"], Resource = aws_sqs_queue.processing_queue.arn },
-      { Sid = "DDBAccess", Effect = "Allow", Action = ["dynamodb:PutItem","dynamodb:UpdateItem"], Resource = aws_dynamodb_table.jobs.arn },
-      { Sid = "SNSAccess", Effect = "Allow", Action = "sns:Publish", Resource = aws_sns_topic.complete.arn }
+            { 
+        Sid      = "SQSEmailAccess", 
+        Effect   = "Allow", 
+        Action   = "sqs:SendMessage", 
+        Resource = aws_sqs_queue.email_notification_queue.arn 
+      },
+
+      { Sid = "DDBAccess", Effect = "Allow", Action = ["dynamodb:PutItem","dynamodb:UpdateItem"], Resource = aws_dynamodb_table.jobs.arn }   
     ]
   })
-}
-
-data "aws_iam_policy_document" "lambda_publish_sns" {
-  statement {
-    sid    = "AllowLambdaToPublishToSNSTopic"
-    effect = "Allow"
-    
-    actions = [
-      "sns:Publish",
-    ]
-    resources = [
-      aws_sqs_queue.email_notification_queue.arn,
-    ]
-  }
-}
-
-resource "aws_iam_policy" "lambda_publish_sns_policy" {
-  name        = "lambda-sns-publish-policy-${var.projectName}"
-  description = "Política que permite ao Lambda publicar em um tópico SNS específico."
-  policy      = data.aws_iam_policy_document.lambda_publish_sns.json
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_sns_publish_attachment" {
-  role       = aws_iam_role.lambda_exec.name 
-  policy_arn = aws_iam_policy.lambda_publish_sns_policy.arn
 }
