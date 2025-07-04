@@ -21,6 +21,7 @@ resource "aws_cognito_user_pool" "pool" {
 
 resource "aws_cognito_user_pool_domain" "main" {
   domain       = "${var.projectName}-${random_id.suffix.hex}"  # Garante domínio único
+  managed_login_version = 2
   user_pool_id = aws_cognito_user_pool.pool.id
 }
 
