@@ -58,7 +58,7 @@ resource "aws_lambda_function" "listing_lambda" {
   function_name    = "${var.projectName}_listing_lambda"
   filename         = data.archive_file.listing_lambda_zip.output_path
   source_code_hash = data.archive_file.listing_lambda_zip.output_base64sha256
-  handler          = "lambda_function.lambda_handler"
+  handler          = "lambda_listing.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_exec_role.arn
 
