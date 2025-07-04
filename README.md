@@ -2,6 +2,10 @@
 
 Este repositório contém a infraestrutura como código (IaC) para o projeto Hackathon SOAT. Utiliza Terraform para provisionamento de recursos em nuvem, incluindo API Gateway, Cognito, S3, SQS e outros serviços necessários para o ambiente de homologação.
 
+## Visão Geral da Arquitetura
+
+<img src="doc/overview.drawio.png" alt="Visão geral da arquitetura" width="1000">
+
 ## Estrutura do Projeto
 
 - `infra/v1/`: Contém os módulos Terraform para os principais recursos de infraestrutura.
@@ -139,7 +143,12 @@ A função retorna objetos com o formato:
 - Erro: `{"statusCode": 400, "body": "{"error_message": "[DESCRIÇÃO DO ERRO]"}"}`
 
 ### Exemplo de e-mail de Sucesso
-<img src="doc/email_screenshot.png" alt="Exemplo de email de sucesso" width="600">
+<img src="doc/success_email_screenshot.png" alt="Exemplo de email de sucesso" width="600">
+
+
+### Exemplo de e-mail de Falha
+<img src="doc/failure_email_screenshot.png" alt="Exemplo de email de falha" width="600">
+
 
 ## Licença
 
