@@ -115,7 +115,7 @@ resource "aws_lambda_function" "pre_sign_up" {
   function_name    = "${var.projectName}_pre_sign_up"
   filename         = data.archive_file.pre_sign_up.output_path
   source_code_hash = data.archive_file.pre_sign_up.output_base64sha256
-  handler          = "main.lambda_handler"
+  handler          = "lambda_pre_sign_up.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_exec_role.arn
 
