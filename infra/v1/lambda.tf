@@ -93,6 +93,7 @@ resource "aws_lambda_function" "processor" {
       OUTPUT_BUCKET = var.output_bucket_name
       DDB_TABLE     = var.ddb_table_name
       SQS_QUEUE_URL = aws_sqs_queue.email_notification_queue.id
+      SENDER_EMAIL = var.verified_email
     }
   }
 }
