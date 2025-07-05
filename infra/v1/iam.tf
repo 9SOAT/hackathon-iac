@@ -103,23 +103,91 @@ resource "aws_iam_role_policy" "custom" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-      { Sid = "S3Access", Effect = "Allow",
-        Action = ["s3:ListBucket","s3:GetObject","s3:HeadObject","s3:PutObject"],
+      {
+        Sid = "S3Access", Effect = "Allow",
+        Action = ["s3:ListBucket", "s3:GetObject", "s3:HeadObject", "s3:PutObject"],
         Resource = [
-          aws_s3_bucket.s3_input_bucket.arn, 
-          "${aws_s3_bucket.s3_input_bucket.arn}/*", 
-          aws_s3_bucket.s3_output_bucket.arn, 
-          "${aws_s3_bucket.s3_output_bucket.arn}/*"]
-        },
-      { Sid = "SQSAccess", Effect = "Allow", Action = ["sqs:ReceiveMessage","sqs:DeleteMessage","sqs:GetQueueAttributes"], Resource = aws_sqs_queue.processing_queue.arn },
-            { 
-        Sid      = "SQSEmailAccess", 
-        Effect   = "Allow", 
-        Action   = "sqs:SendMessage", 
-        Resource = aws_sqs_queue.email_notification_queue.arn 
+          aws_s3_bucket.s3_input_bucket.arn,
+          "${aws_s3_bucket.s3_input_bucket.arn}/*",
+          aws_s3_bucket.s3_output_bucket.arn,
+          "${aws_s3_bucket.s3_output_bucket.arn}/*"
+        ]
+      },
+      {
+        Sid      = "SQSAccess",
+        Effect   = "Allow",
+        Action = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"],
+        Resource = aws_sqs_queue.processing_queue.arn
+      },
+      {
+        Sid      = "SQSEmailAccess",
+        Effect   = "Allow",
+        Action   = "sqs:SendMessage",
+        Resource = aws_sqs_queue.email_notification_queue.arn
       },
 
-      { Sid = "DDBAccess", Effect = "Allow", Action = ["dynamodb:PutItem","dynamodb:UpdateItem"], Resource = aws_dynamodb_table.jobs.arn }   
+      {
+        Sid      = "DDBAccess", Effect = "Allow", Action = ["dynamodb:PutItem", "dynamodb:UpdateItem"],
+        Resource = aws_dynamodb_table.jobs.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "listing_lambda_exec" {
+  name = "lambda-listing-role-${var.projectName}"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{ Action = "sts:AssumeRole", Effect = "Allow", Principal = { Service = "lambda.amazonaws.com" } }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "listing_lambda_exec_basic" {
+  role       = aws_iam_role.listing_lambda_exec.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+}
+
+resource "aws_iam_role_policy" "listing_lambda_custom" {
+  name = "lambda-listing-custom-policy-${var.projectName}"
+  role = aws_iam_role.listing_lambda_exec.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "ReadWriteTable",
+        "Effect" : "Allow",
+        "Action" : [
+          "dynamodb:BatchGetItem",
+          "dynamodb:GetItem",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:BatchWriteItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem"
+        ],
+        "Resource" : "arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.jobs.name}"
+      },
+      {
+        "Sid" : "GetStreamRecords",
+        "Effect" : "Allow",
+        "Action" : "dynamodb:GetRecords",
+        "Resource": "arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.jobs.name}/stream/* "
+      },
+      {
+        "Sid" : "WriteLogStreamsAndGroups",
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Sid" : "CreateLogGroup",
+        "Effect" : "Allow",
+        "Action" : "logs:CreateLogGroup",
+        "Resource" : "*"
+      }
     ]
   })
 }

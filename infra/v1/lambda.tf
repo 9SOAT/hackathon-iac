@@ -60,7 +60,7 @@ resource "aws_lambda_function" "listing_lambda" {
   source_code_hash = data.archive_file.listing_lambda_zip.output_base64sha256
   handler          = "lambda_listing.lambda_handler"
   runtime          = "python3.11"
-  role             = aws_iam_role.lambda_exec_role.arn
+  role             = aws_iam_role.listing_lambda_exec.arn
 
   environment {
     variables = {
