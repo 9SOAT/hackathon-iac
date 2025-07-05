@@ -7,6 +7,16 @@ resource "aws_cognito_user_pool" "pool" {
     minimum_length = 6
   }
 
+  lambda_config {
+    pre_token_generation           = aws_lambda_function.pre_sign_up.arn # Set this parameter for legacy purposes; for new instances of pre token generation triggers, set the LambdaArn of `pre_token_generation_config`
+
+    pre_token_generation_config {
+      lambda_arn     = aws_lambda_function.pre_sign_up.arn
+      lambda_version = "V3_0"
+    }
+  }
+
+
   verification_message_template {
     default_email_option = "CONFIRM_WITH_CODE"
     email_subject = "Account Confirmation"
