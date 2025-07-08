@@ -1,4 +1,4 @@
-# hackathon-iac
+# Hackathon IaC
 
 Este repositório contém a infraestrutura como código (IaC) para o projeto Hackathon SOAT. Utiliza Terraform para provisionamento de recursos em nuvem, incluindo API Gateway, Cognito, S3, SQS e outros serviços necessários para o ambiente de homologação.
 
